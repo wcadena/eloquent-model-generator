@@ -36,7 +36,9 @@ class ExistenceCheckerProcessor implements ProcessorInterface
         $schemaManager = $this->databaseManager->connection($config->get('connection'))->getDoctrineSchemaManager();
         $prefix = $this->databaseManager->connection($config->get('connection'))->getTablePrefix();
 
-        if (!$schemaManager->tablesExist($prefix . $model->getTableName())) {
+        $replaced_table = str_replace_first('dbo.', '', $model->getTableName());
+        //sql server
+        if (!$schemaManager->tablesExist($prefix . $replaced_table)) {
             throw new GeneratorException(sprintf('Table %s does not exist', $prefix . $model->getTableName()));
         }
     }
